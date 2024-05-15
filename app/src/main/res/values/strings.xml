@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MovieFindefAPD</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="new_user">Новый пользователь?\n<u>Создать аккаунт</u></string>
+    <string name="gost"><u>Войти как гость</u></string>
+</resources>
