@@ -26,6 +26,10 @@ import com.example.moviefindefapd.databinding.FragmentHomeBinding
 import com.example.moviefindefapd.ui.adapters.FilmsAdapter
 import com.example.moviefindefapd.ui.adapters.OnClickListener
 import com.example.moviefindefapd.ui.view_models.PopularViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class HomeFragment : Fragment() {
 
@@ -46,6 +50,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         sharedViewModel.navController = findNavController()
         setupUI()

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "161334129165",
+    "firebase_url": "https://moviefindefapd-default-rtdb.firebaseio.com",
+    "project_id": "moviefindefapd",
+    "storage_bucket": "moviefindefapd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161334129165:android:6203ec8b3ce37e04d2db44",
+        "android_client_info": {
+          "package_name": "com.example.moviefindefapd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC921-PhuQ8gEsXi2YqhQd-3RRJFi4SHtU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

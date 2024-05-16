@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -40,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
     val lifecycle_version = "2.7.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -77,5 +79,7 @@ dependencies {
 
     // Lifecycles only (without ViewModel or LiveData)
     implementation("androidx.lifecycle:lifecycle-runtime:$lifecycle_version")
+
+    implementation("com.google.firebase:firebase-database:21.0.0")
 
 }
