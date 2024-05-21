@@ -9,18 +9,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.moviefindefapd.data.models.UserData
 import com.example.moviefindefapd.databinding.FragmentMovieBinding
 import com.example.moviefindefapd.ui.view_models.MovieViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MovieFragment : Fragment() {
 
     private var binding: FragmentMovieBinding? = null
     private var viewModel: MovieViewModel? = null
     private var filmId: String? = null
+    val userId by lazy {
+        SharedPreferencesHelper.getStringFromPreferences(requireContext())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +47,7 @@ class MovieFragment : Fragment() {
 
         return binding!!.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,10 +57,13 @@ class MovieFragment : Fragment() {
 //            binding.btnRepeat.setOnClickListener {
 //                checkInternet(binding)
 //            }
-
         }
 
-        binding!!.btnFloating.setOnClickListener{
+        binding!!.btnFavorite.setOnClickListener {
+            addFavoriteFilm(userId!!)
+        }
+
+        binding!!.btnFloating.setOnClickListener {
             findNavController().popBackStack()
         }
     }
@@ -132,7 +145,8 @@ class MovieFragment : Fragment() {
 
     private fun isInternetAvailable(context: Context): Boolean {
 
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             val network = connectivityManager.activeNetwork ?: return false
@@ -149,6 +163,45 @@ class MovieFragment : Fragment() {
             @Suppress("DEPRECATION")
             return networkInfo.isConnected
         }
-
     }
+
+    fun addFavoriteFilm(name: String) {
+        if (name != "null") {
+            val firebaseRef = FirebaseDatabase.getInstance().getReference("users")
+            firebaseRef.child(name).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        val user = dataSnapshot.getValue(UserData::class.java)
+                        if (user != null) {
+                            if (user.favoriteFilm.contains(filmId!!)) {
+                                user.favoriteFilm.remove(filmId!!)
+                            } else {
+                                user.favoriteFilm.add(filmId!!)
+                            }
+                            firebaseRef.child(name).setValue(user)
+                                .addOnCompleteListener {
+                                    Toast.makeText(requireContext(), "Успешно", Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Error: ${it.message}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                        }
+                    } else {
+                        Toast.makeText(context, "User not found", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                }
+
+            })
+        }
+    }
+
 }

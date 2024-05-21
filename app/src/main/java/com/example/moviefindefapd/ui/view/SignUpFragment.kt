@@ -1,5 +1,6 @@
 package com.example.moviefindefapd.ui.view
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.util.Log
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.moviefindefapd.R
 import com.example.moviefindefapd.data.models.UserData
 import com.example.moviefindefapd.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -46,6 +48,13 @@ class SignUpFragment : Fragment() {
         bindingclass?.btnSighUp?.setOnClickListener {
             createUser()
         }
+
+        bindingclass?.btnToSignUp?.setOnClickListener {
+            SharedPreferencesHelper.saveStringToPreferences(requireContext(), "null")
+            findNavController().navigate(
+                R.id.action_signUpFragment_to_homeFragment2
+            )
+        }
     }
 
     private fun createUser() {
@@ -67,6 +76,10 @@ class SignUpFragment : Fragment() {
             firebaseRef.child(name).setValue(users)
                 .addOnCompleteListener{
                     Toast.makeText(context, "complete", Toast.LENGTH_LONG).show()
+                    SharedPreferencesHelper.saveStringToPreferences(requireContext(), name)
+                    findNavController().navigate(
+                        R.id.action_signUpFragment_to_homeFragment2
+                    )
 
                 }
                 .addOnFailureListener{
@@ -75,5 +88,7 @@ class SignUpFragment : Fragment() {
         }
 
     }
+
+
 
 }
